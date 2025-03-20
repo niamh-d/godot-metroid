@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/background2.png-c200ec038f0b775afa5a30a8f42cb7c6.stex"
+path="res://.import/CaveTileset.png-45aebba04a673557002d64af214362e9.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Cave/background2.png"
-dest_files=[ "res://.import/background2.png-c200ec038f0b775afa5a30a8f42cb7c6.stex" ]
+source_file="res://Scenes/TileMaps/Cave/CaveTileset.png"
+dest_files=[ "res://.import/CaveTileset.png-45aebba04a673557002d64af214362e9.stex" ]
 
 [params]
 

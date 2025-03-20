@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/background4a.png-c461cfb4428f25f06f8856ebc692246c.stex"
+path="res://.import/background4a.png-e64a4b1317b8085045e8b13d7258265d.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Cave/background4a.png"
-dest_files=[ "res://.import/background4a.png-c461cfb4428f25f06f8856ebc692246c.stex" ]
+source_file="res://Assets/Cave/background4a.png"
+dest_files=[ "res://.import/background4a.png-e64a4b1317b8085045e8b13d7258265d.stex" ]
 
 [params]
 
