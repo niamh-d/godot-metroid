@@ -1,3 +1,5 @@
+using Godot;
+
 public class HeroStateIdle : IHeroState
 {
     public IHeroState DoState(HeroStateMachine hero, float delta)
@@ -6,7 +8,28 @@ public class HeroStateIdle : IHeroState
     }
     private IHeroState Idle(HeroStateMachine hero, float delta)
     {
-        hero.HeroAnimations.Play("HeroIdle");
+        if (hero.IsOnFloor())
+        {
+            hero.EnableSnap();
+
+            if (Input.IsActionJustPressed("Jump"))
+            {
+                return hero.StateInitJump;
+            }
+
+            hero.HeroAnimations.Play("HeroIdle");
+
+            if (hero.IsMoving)
+            {
+                return hero.StateRun;
+            }
+
+            return hero.StateIdle;
+        }
+        else if (!hero.IsOnFloor())
+        {
+            return hero.StateFall;
+        }
         return hero.StateIdle;
     }
 }
