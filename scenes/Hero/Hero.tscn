@@ -1,11 +1,17 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://Scenes/Hero/Gfx/adventurer-v1.5-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/Hero/Scripts/HeroStateMachine.cs" type="Script" id=2]
 
+[sub_resource type="RectangleShape2D" id=29]
+extents = Vector2( 3.5, 3.5 )
+
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 8.0
 height = 12.0
+
+[sub_resource type="RectangleShape2D" id=30]
+extents = Vector2( 10, 9 )
 
 [sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 1 )
@@ -153,9 +159,19 @@ animations = [ {
 scale = Vector2( 2, 2 )
 script = ExtResource( 2 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShapeHead" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2( 0, -8 )
+shape = SubResource( 29 )
+
+[node name="CollisionShapeBody" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2( 0, 4 )
 shape = SubResource( 1 )
+
+[node name="CollisionShapeSlide" type="CollisionShape2D" parent="."]
+position = Vector2( 2, 9 )
+shape = SubResource( 30 )
 
 [node name="HeroAnimations" type="AnimatedSprite" parent="."]
 frames = SubResource( 6 )
