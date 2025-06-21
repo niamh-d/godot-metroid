@@ -10,7 +10,12 @@ public class HeroStateIdle : IHeroState
     {
         if (hero.IsOnFloor())
         {
-            hero.EnableSnap();
+            hero.HeroMoveLogic.EnableSnap();
+
+            if (Input.IsActionJustPressed("Jump") && Input.IsActionPressed("Down"))
+            {
+                return hero.StateSlide;
+            }
 
             if (Input.IsActionJustPressed("Jump"))
             {

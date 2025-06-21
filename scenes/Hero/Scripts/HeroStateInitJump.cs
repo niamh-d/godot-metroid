@@ -11,7 +11,7 @@ public class HeroStateInitJump : IHeroState
 
     private IHeroState InitiateJump(HeroStateMachine hero, float delta)
     {
-        hero.DisableSnap();
+        hero.HeroMoveLogic.DisableSnap();
 
         hero.HeroMoveLogic.Velocity.y = JumpForce;
 

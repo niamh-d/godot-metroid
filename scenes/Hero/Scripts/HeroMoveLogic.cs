@@ -4,11 +4,12 @@ public class HeroMoveLogic
 {
     private float Gravity = 1500;
     private float MovementAcceleration = 20;
-    private float MaxMovementSpeed = 280;
+    public float MaxMovementSpeed = 280;
     private float Friction = 1.0f;
     public Vector2 SnapVector;
     public Vector2 Velocity = Vector2.Zero;
-    HeroStateMachine Hero;
+    private HeroStateMachine Hero;
+    public bool MovementDisabled = false;
 
     public HeroMoveLogic(HeroStateMachine hero)
     {
@@ -33,12 +34,15 @@ public class HeroMoveLogic
         float leftDirectionStrength = Input.GetActionStrength("MoveLeft");
         float rightDirectionStrength = Input.GetActionStrength("MoveRight");
 
-        UpdateVelocity(leftDirectionStrength, rightDirectionStrength);
+        if (!MovementDisabled)
+        {
+            UpdateVelocity(leftDirectionStrength, rightDirectionStrength);
 
-        UpdateRightMovement(leftDirectionStrength, rightDirectionStrength);
-        UpdateLeftMovement(leftDirectionStrength, rightDirectionStrength);
+            UpdateRightMovement(leftDirectionStrength, rightDirectionStrength);
+            UpdateLeftMovement(leftDirectionStrength, rightDirectionStrength);
 
-        UpdateIsMoving(leftDirectionStrength, rightDirectionStrength);
+            UpdateIsMoving(leftDirectionStrength, rightDirectionStrength);
+        }
     }
 
     private void UpdateVelocity(float leftDirectionStrength, float rightDirectionStrength)
@@ -118,5 +122,15 @@ public class HeroMoveLogic
     public void ApplyGravity(float delta)
     {
         Velocity.y += Gravity * delta;
+    }
+
+    public void EnableSnap()
+    {
+        SnapVector = new Vector2(0, 15);
+    }
+
+    public void DisableSnap()
+    {
+        SnapVector = Vector2.Zero;
     }
 }

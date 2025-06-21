@@ -8,7 +8,7 @@ public class HeroStateFall : IHeroState
 
     private IHeroState Fall(HeroStateMachine hero, float delta)
     {
-        hero.EnableSnap();
+        hero.HeroMoveLogic.EnableSnap();
 
         hero.HeroAnimations.Play("HeroFall");
 

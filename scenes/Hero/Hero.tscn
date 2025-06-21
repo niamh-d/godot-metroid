@@ -11,7 +11,7 @@ radius = 8.0
 height = 12.0
 
 [sub_resource type="RectangleShape2D" id=30]
-extents = Vector2( 10, 9 )
+extents = Vector2( 10, 7 )
 
 [sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 1 )
@@ -160,17 +160,15 @@ scale = Vector2( 2, 2 )
 script = ExtResource( 2 )
 
 [node name="CollisionShapeHead" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2( 0, -8 )
 shape = SubResource( 29 )
 
 [node name="CollisionShapeBody" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2( 0, 4 )
 shape = SubResource( 1 )
 
 [node name="CollisionShapeSlide" type="CollisionShape2D" parent="."]
-position = Vector2( 2, 9 )
+position = Vector2( 2, 11 )
 shape = SubResource( 30 )
 
 [node name="HeroAnimations" type="AnimatedSprite" parent="."]
@@ -193,7 +191,9 @@ drag_margin_bottom = 0.1
 [node name="Timers" type="Node2D" parent="."]
 
 [node name="SlideTimer" type="Timer" parent="Timers"]
+wait_time = 0.5
 
 [node name="SlideStandUpTimer" type="Timer" parent="Timers"]
+wait_time = 0.5
 
 [connection signal="animation_finished" from="HeroAnimations" to="." method="HeroAnimationDone"]

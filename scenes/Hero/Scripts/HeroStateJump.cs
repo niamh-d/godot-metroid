@@ -13,7 +13,7 @@ public class HeroStateJump : IHeroState
 
     private IHeroState Jump(HeroStateMachine hero, float delta)
     {
-        hero.DisableSnap();
+        hero.HeroMoveLogic.DisableSnap();
 
         hero.HeroAnimations.Play("HeroJump");
 

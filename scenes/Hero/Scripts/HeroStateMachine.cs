@@ -7,6 +7,8 @@ public class HeroStateMachine : KinematicBody2D
     public HeroStateFall StateFall = new HeroStateFall();
     public HeroStateInitJump StateInitJump = new HeroStateInitJump();
     public HeroStateJump StateJump = new HeroStateJump();
+    public HeroStateSlide StateSlide = new HeroStateSlide();
+    public HeroStateSlideStandUp StateSlideStandUp = new HeroStateSlideStandUp();
     public HeroMoveLogic HeroMoveLogic;
     public HeroCollisionShapes HeroCollisionShapes;
     public HeroTimers HeroTimers;
@@ -65,16 +67,6 @@ public class HeroStateMachine : KinematicBody2D
     private void UpdateHeroState(float delta)
     {
         CurrentState = CurrentState.DoState(this, delta);
-    }
-
-    public void EnableSnap()
-    {
-        HeroMoveLogic.SnapVector = new Vector2(0, 15);
-    }
-
-    public void DisableSnap()
-    {
-        HeroMoveLogic.SnapVector = Vector2.Zero;
     }
 
     public override void _PhysicsProcess(float delta)
