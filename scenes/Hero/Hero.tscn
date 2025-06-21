@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://Scenes/Hero/Gfx/adventurer-v1.5-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/Hero/Scripts/HeroStateMachine.cs" type="Script" id=2]
@@ -87,6 +87,30 @@ region = Rect2( 250, 37, 50, 37 )
 atlas = ExtResource( 1 )
 region = Rect2( 300, 37, 50, 37 )
 
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 1 )
+region = Rect2( 150, 111, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 1 )
+region = Rect2( 200, 111, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 1 )
+region = Rect2( 250, 111, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 1 )
+region = Rect2( 300, 111, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=27]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 148, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=28]
+atlas = ExtResource( 1 )
+region = Rect2( 200, 0, 50, 37 )
+
 [sub_resource type="SpriteFrames" id=6]
 animations = [ {
 "frames": [ SubResource( 7 ), SubResource( 8 ) ],
@@ -113,6 +137,16 @@ animations = [ {
 "loop": true,
 "name": "HeroRun",
 "speed": 7.0
+}, {
+"frames": [ SubResource( 23 ), SubResource( 24 ), SubResource( 25 ) ],
+"loop": true,
+"name": "HeroSlide",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 26 ), SubResource( 27 ), SubResource( 28 ) ],
+"loop": false,
+"name": "HeroSlideStandUp",
+"speed": 5.0
 } ]
 
 [node name="Hero" type="KinematicBody2D"]
@@ -125,7 +159,7 @@ shape = SubResource( 1 )
 
 [node name="HeroAnimations" type="AnimatedSprite" parent="."]
 frames = SubResource( 6 )
-animation = "HeroJump"
+animation = "HeroSlideStandUp"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
@@ -139,5 +173,11 @@ drag_margin_left = 0.1
 drag_margin_top = 0.1
 drag_margin_right = 0.1
 drag_margin_bottom = 0.1
+
+[node name="Timers" type="Node2D" parent="."]
+
+[node name="SlideTimer" type="Timer" parent="Timers"]
+
+[node name="SlideStandUpTimer" type="Timer" parent="Timers"]
 
 [connection signal="animation_finished" from="HeroAnimations" to="." method="HeroAnimationDone"]
