@@ -130,6 +130,13 @@ public class HeroMoveLogic
     {
         if (!GravityDisabled)
         {
+            if (Hero.CurrentState == Hero.StateGlide)
+            {
+                Velocity.y += Hero.StateGlide.GliderGravity * delta;
+                return;
+            }
+
+
             Velocity.y += Gravity * delta;
         }
     }

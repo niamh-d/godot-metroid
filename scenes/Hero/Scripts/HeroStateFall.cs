@@ -1,3 +1,5 @@
+using Godot;
+
 public class HeroStateFall : IHeroState
 {
 
@@ -15,6 +17,12 @@ public class HeroStateFall : IHeroState
         if (hero.StateLedgeGrab.CanHeroLedgeGrab(hero))
         {
             return hero.StateLedgeGrab;
+        }
+
+        if (Input.IsActionPressed("Glide"))
+        {
+            hero.HeroEquipment.Glider.OpenGlider();
+            return hero.StateGlide;
         }
 
         if (hero.IsOnFloor())

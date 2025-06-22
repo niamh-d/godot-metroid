@@ -23,6 +23,13 @@ public class HeroStateJump : IHeroState
             return hero.StateFall;
         }
 
+        if (Input.IsActionPressed("Glide"))
+        {
+            hero.HeroAnimations.Play("HeroFall");
+            hero.HeroEquipment.Glider.OpenGlider();
+            return hero.StateGlide;
+        }
+
         if (!hero.IsOnFloor())
         {
             if (hero.HeroMoveLogic.Velocity.y < 0)

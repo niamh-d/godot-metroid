@@ -11,12 +11,14 @@ public class HeroStateMachine : KinematicBody2D
     public HeroStateSlideStandUp StateSlideStandUp = new HeroStateSlideStandUp();
     public HeroStateLedgeGrab StateLedgeGrab = new HeroStateLedgeGrab();
     public HeroStateLedgeClimb StateLedgeClimb = new HeroStateLedgeClimb();
+    public HeroStateGlide StateGlide = new HeroStateGlide();
     public HeroMoveLogic HeroMoveLogic;
     public HeroCollisionShapes HeroCollisionShapes;
     public HeroTimers HeroTimers;
     public Hero2DRayCasts HeroRayCasts;
     public AnimatedSprite HeroAnimations;
-    private IHeroState CurrentState;
+    public HeroEquipment HeroEquipment;
+    public IHeroState CurrentState;
     private bool IsInitialized = false;
     public bool IsMoving;
     public string LastPlayedHeroAnimation = string.Empty;
@@ -44,6 +46,9 @@ public class HeroStateMachine : KinematicBody2D
         if (!initOk) return false;
 
         HeroRayCasts = new Hero2DRayCasts(this, ref initOk);
+        if (!initOk) return false;
+
+        HeroEquipment = new HeroEquipment(this, ref initOk);
         if (!initOk) return false;
 
         initOk = GetHeroAnimationsNode();
