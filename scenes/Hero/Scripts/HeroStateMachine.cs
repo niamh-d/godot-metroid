@@ -9,9 +9,11 @@ public class HeroStateMachine : KinematicBody2D
     public HeroStateJump StateJump = new HeroStateJump();
     public HeroStateSlide StateSlide = new HeroStateSlide();
     public HeroStateSlideStandUp StateSlideStandUp = new HeroStateSlideStandUp();
+    public HeroStateLedgeGrab StateLedgeGrab = new HeroStateLedgeGrab();
     public HeroMoveLogic HeroMoveLogic;
     public HeroCollisionShapes HeroCollisionShapes;
     public HeroTimers HeroTimers;
+    public Hero2DRayCasts HeroRayCasts;
     public AnimatedSprite HeroAnimations;
     private IHeroState CurrentState;
     private bool IsInitialized = false;
@@ -38,6 +40,9 @@ public class HeroStateMachine : KinematicBody2D
         if (!initOk) return false;
 
         HeroTimers = new HeroTimers(this, ref initOk);
+        if (!initOk) return false;
+
+        HeroRayCasts = new Hero2DRayCasts(this, ref initOk);
         if (!initOk) return false;
 
         initOk = GetHeroAnimationsNode();

@@ -10,6 +10,7 @@ public class HeroMoveLogic
     public Vector2 Velocity = Vector2.Zero;
     private HeroStateMachine Hero;
     public bool MovementDisabled = false;
+    public bool GravityDisabled = false;
 
     public HeroMoveLogic(HeroStateMachine hero)
     {
@@ -79,6 +80,9 @@ public class HeroMoveLogic
             }
 
             Hero.HeroAnimations.FlipH = false;
+
+            Hero.HeroRayCasts.LedgeGrabRayCastTileAbove.RotationDegrees = 0;
+            Hero.HeroRayCasts.LedgeGrabRayCastTileHead.RotationDegrees = 0;
         }
     }
 
@@ -95,6 +99,9 @@ public class HeroMoveLogic
             }
 
             Hero.HeroAnimations.FlipH = true;
+
+            Hero.HeroRayCasts.LedgeGrabRayCastTileAbove.RotationDegrees = -180;
+            Hero.HeroRayCasts.LedgeGrabRayCastTileHead.RotationDegrees = -180;
         }
     }
 
@@ -121,7 +128,10 @@ public class HeroMoveLogic
 
     public void ApplyGravity(float delta)
     {
-        Velocity.y += Gravity * delta;
+        if (!GravityDisabled)
+        {
+            Velocity.y += Gravity * delta;
+        }
     }
 
     public void EnableSnap()

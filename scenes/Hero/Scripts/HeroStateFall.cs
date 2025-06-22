@@ -12,6 +12,11 @@ public class HeroStateFall : IHeroState
 
         hero.HeroAnimations.Play("HeroFall");
 
+        if (hero.StateLedgeGrab.CanHeroLedgeGrab(hero))
+        {
+            return hero.StateLedgeGrab;
+        }
+
         if (hero.IsOnFloor())
         {
             if (hero.IsMoving)

@@ -1,10 +1,10 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=37 format=2]
 
 [ext_resource path="res://Scenes/Hero/Gfx/adventurer-v1.5-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/Hero/Scripts/HeroStateMachine.cs" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=29]
-extents = Vector2( 3.5, 3.5 )
+extents = Vector2( 3.75, 2 )
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 8.0
@@ -68,6 +68,22 @@ region = Rect2( 300, 74, 50, 37 )
 [sub_resource type="AtlasTexture" id=22]
 atlas = ExtResource( 1 )
 region = Rect2( 0, 111, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=31]
+atlas = ExtResource( 1 )
+region = Rect2( 50, 148, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=32]
+atlas = ExtResource( 1 )
+region = Rect2( 100, 148, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=33]
+atlas = ExtResource( 1 )
+region = Rect2( 150, 148, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=34]
+atlas = ExtResource( 1 )
+region = Rect2( 200, 148, 50, 37 )
 
 [sub_resource type="AtlasTexture" id=9]
 atlas = ExtResource( 1 )
@@ -139,6 +155,11 @@ animations = [ {
 "name": "HeroJump",
 "speed": 10.0
 }, {
+"frames": [ SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ) ],
+"loop": true,
+"name": "HeroLedgeGrab",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ) ],
 "loop": true,
 "name": "HeroRun",
@@ -160,7 +181,7 @@ scale = Vector2( 2, 2 )
 script = ExtResource( 2 )
 
 [node name="CollisionShapeHead" type="CollisionShape2D" parent="."]
-position = Vector2( 0, -8 )
+position = Vector2( 0.25, -6 )
 shape = SubResource( 29 )
 
 [node name="CollisionShapeBody" type="CollisionShape2D" parent="."]
@@ -170,10 +191,11 @@ shape = SubResource( 1 )
 [node name="CollisionShapeSlide" type="CollisionShape2D" parent="."]
 position = Vector2( 2, 11 )
 shape = SubResource( 30 )
+disabled = true
 
 [node name="HeroAnimations" type="AnimatedSprite" parent="."]
 frames = SubResource( 6 )
-animation = "HeroSlideStandUp"
+animation = "HeroIdle"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
@@ -195,5 +217,19 @@ wait_time = 0.5
 
 [node name="SlideStandUpTimer" type="Timer" parent="Timers"]
 wait_time = 0.5
+
+[node name="LedgeFallTimer" type="Timer" parent="Timers"]
+
+[node name="RayCasts" type="Node2D" parent="."]
+
+[node name="LedgeGrabRayCastTileAbove" type="RayCast2D" parent="RayCasts"]
+position = Vector2( 0, -15 )
+enabled = true
+cast_to = Vector2( 19, 0 )
+
+[node name="LedgeGrabRayCastTileHead" type="RayCast2D" parent="RayCasts"]
+position = Vector2( 0, -11 )
+enabled = true
+cast_to = Vector2( 12, 0 )
 
 [connection signal="animation_finished" from="HeroAnimations" to="." method="HeroAnimationDone"]
