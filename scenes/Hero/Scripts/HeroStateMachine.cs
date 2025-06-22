@@ -10,6 +10,7 @@ public class HeroStateMachine : KinematicBody2D
     public HeroStateSlide StateSlide = new HeroStateSlide();
     public HeroStateSlideStandUp StateSlideStandUp = new HeroStateSlideStandUp();
     public HeroStateLedgeGrab StateLedgeGrab = new HeroStateLedgeGrab();
+    public HeroStateLedgeClimb StateLedgeClimb = new HeroStateLedgeClimb();
     public HeroMoveLogic HeroMoveLogic;
     public HeroCollisionShapes HeroCollisionShapes;
     public HeroTimers HeroTimers;

@@ -6,6 +6,7 @@ public class HeroTimers
     public Timer SlideTimer;
     public Timer SlideStandUpTimer;
     public Timer LedgeFallTimer;
+    public Timer LedgeClimbTimer;
     private bool TimersInitialized;
 
     public HeroTimers(HeroStateMachine hero, ref bool initOk)
@@ -25,6 +26,9 @@ public class HeroTimers
         if (!TimersInitialized) return false;
 
         LedgeFallTimer = GetTimerNode("LedgeFallTimer");
+        if (!TimersInitialized) return false;
+
+        LedgeClimbTimer = GetTimerNode("LedgeClimbTimer");
         if (!TimersInitialized) return false;
 
         return true;

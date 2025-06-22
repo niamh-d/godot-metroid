@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://Scenes/Hero/Gfx/adventurer-v1.5-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/Hero/Scripts/HeroStateMachine.cs" type="Script" id=2]
@@ -68,6 +68,26 @@ region = Rect2( 300, 74, 50, 37 )
 [sub_resource type="AtlasTexture" id=22]
 atlas = ExtResource( 1 )
 region = Rect2( 0, 111, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=35]
+atlas = ExtResource( 1 )
+region = Rect2( 250, 148, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=36]
+atlas = ExtResource( 1 )
+region = Rect2( 300, 148, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=37]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 185, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=38]
+atlas = ExtResource( 1 )
+region = Rect2( 50, 185, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=39]
+atlas = ExtResource( 1 )
+region = Rect2( 100, 185, 50, 37 )
 
 [sub_resource type="AtlasTexture" id=31]
 atlas = ExtResource( 1 )
@@ -155,6 +175,11 @@ animations = [ {
 "name": "HeroJump",
 "speed": 10.0
 }, {
+"frames": [ SubResource( 35 ), SubResource( 36 ), SubResource( 37 ), SubResource( 38 ), SubResource( 39 ) ],
+"loop": false,
+"name": "HeroLedgeClimb",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ) ],
 "loop": true,
 "name": "HeroLedgeGrab",
@@ -195,7 +220,7 @@ disabled = true
 
 [node name="HeroAnimations" type="AnimatedSprite" parent="."]
 frames = SubResource( 6 )
-animation = "HeroIdle"
+animation = "HeroLedgeClimb"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
@@ -219,6 +244,9 @@ wait_time = 0.5
 wait_time = 0.5
 
 [node name="LedgeFallTimer" type="Timer" parent="Timers"]
+
+[node name="LedgeClimbTimer" type="Timer" parent="Timers"]
+wait_time = 0.9
 
 [node name="RayCasts" type="Node2D" parent="."]
 

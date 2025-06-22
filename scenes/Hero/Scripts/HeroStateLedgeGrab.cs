@@ -44,6 +44,12 @@ public class HeroStateLedgeGrab : Timer, IHeroState
         Hero.HeroMoveLogic.MovementDisabled = true;
         Hero.HeroMoveLogic.Velocity.y = 0;
 
+        if (Input.IsActionJustPressed("Up"))
+        {
+            return Hero.StateLedgeClimb;
+        }
+
+
         if (Input.IsActionJustPressed("Down"))
         {
             FallAfterLedgeGrab = true;

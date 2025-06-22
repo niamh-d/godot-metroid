@@ -75,4 +75,11 @@ public class HeroCollisionShapes
         Body.Disabled = true;
         Slide.Disabled = false;
     }
+
+    public void DisableAllCollisionShapes()
+    {
+        Head.Disabled = true;
+        Body.Disabled = true;
+        Slide.Disabled = true;
+    }
 }
