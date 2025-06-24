@@ -5,7 +5,7 @@ public class HeroStateJump : IHeroState
 {
     private const float CutJumpThreshold = -200.0f;
     private const float JumpForceAfterJumpCutShort = -320.0f;
-    private int MaxJumps = 2;
+    private int MaxJumps = 1;
     private int JumpCount = 0;
 
     public IHeroState DoState(HeroStateMachine hero, float delta)
@@ -66,5 +66,19 @@ public class HeroStateJump : IHeroState
     {
         JumpCount++;
         return JumpCount < MaxJumps;
+    }
+
+    public bool CanWallJump(HeroStateMachine hero)
+    {
+        if (hero.HeroRayCasts.LeftWallRayCast.IsColliding() && !hero.HeroAnimations.FlipH)
+        {
+            return true;
+        }
+
+        if (hero.HeroRayCasts.RightWallRayCast.IsColliding() && hero.HeroAnimations.FlipH)
+        {
+            return true;
+        }
+        return false;
     }
 }

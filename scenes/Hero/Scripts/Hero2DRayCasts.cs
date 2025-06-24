@@ -6,6 +6,8 @@ public class Hero2DRayCasts
     private bool RaycastsInitialized;
     public RayCast2D LedgeGrabRayCastTileAbove;
     public RayCast2D LedgeGrabRayCastTileHead;
+    public RayCast2D LeftWallRayCast;
+    public RayCast2D RightWallRayCast;
 
     public Hero2DRayCasts(HeroStateMachine hero, ref bool initOk)
     {
@@ -21,6 +23,12 @@ public class Hero2DRayCasts
         if (!RaycastsInitialized) return false;
 
         LedgeGrabRayCastTileHead = GetRayCastNode("LedgeGrabRayCastTileHead");
+        if (!RaycastsInitialized) return false;
+
+        LeftWallRayCast = GetRayCastNode("LeftWallRayCast");
+        if (!RaycastsInitialized) return false;
+
+        RightWallRayCast = GetRayCastNode("RightWallRayCast");
         if (!RaycastsInitialized) return false;
 
         return true;

@@ -261,6 +261,16 @@ position = Vector2( 0, -11 )
 enabled = true
 cast_to = Vector2( 12, 0 )
 
+[node name="LeftWallRayCast" type="RayCast2D" parent="RayCasts"]
+position = Vector2( -9, 10 )
+enabled = true
+cast_to = Vector2( -8, 0 )
+
+[node name="RightWallRayCast" type="RayCast2D" parent="RayCasts"]
+position = Vector2( 9, 10 )
+enabled = true
+cast_to = Vector2( 8, 0 )
+
 [node name="Equipment" type="Node2D" parent="."]
 
 [node name="Glider" parent="Equipment" instance=ExtResource( 3 )]
