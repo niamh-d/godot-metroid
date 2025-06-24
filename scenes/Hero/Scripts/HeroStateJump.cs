@@ -5,6 +5,8 @@ public class HeroStateJump : IHeroState
 {
     private const float CutJumpThreshold = -200.0f;
     private const float JumpForceAfterJumpCutShort = -320.0f;
+    private int MaxJumps = 2;
+    private int JumpCount = 0;
 
     public IHeroState DoState(HeroStateMachine hero, float delta)
     {
@@ -44,8 +46,25 @@ public class HeroStateJump : IHeroState
         }
         else if (hero.IsOnFloor())
         {
+            ResetJumpCounter();
             return hero.StateIdle;
         }
         return hero.StateJump;
+    }
+
+    public void SetMaxJumps(int numJumps)
+    {
+        this.MaxJumps = numJumps;
+    }
+
+    public void ResetJumpCounter()
+    {
+        this.JumpCount = 0;
+    }
+
+    public bool CanJumpAgainInAir()
+    {
+        JumpCount++;
+        return JumpCount < MaxJumps;
     }
 }

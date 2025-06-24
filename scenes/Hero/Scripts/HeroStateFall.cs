@@ -27,12 +27,23 @@ public class HeroStateFall : IHeroState
 
         if (hero.IsOnFloor())
         {
+            hero.StateJump.ResetJumpCounter();
+
             if (hero.IsMoving)
             {
                 return hero.StateRun;
             }
             return hero.StateIdle;
         }
+
+        if (Input.IsActionJustPressed("Jump"))
+        {
+            if (hero.StateJump.CanJumpAgainInAir())
+            {
+                return hero.StateInitJump;
+            }
+        }
+
         return hero.StateFall;
     }
 }
