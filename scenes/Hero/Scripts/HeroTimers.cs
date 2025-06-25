@@ -8,6 +8,7 @@ public class HeroTimers
     public Timer LedgeFallTimer;
     public Timer LedgeClimbTimer;
     public Timer AttackTimer;
+    public Timer CoyoteTimeTimer;
     private bool TimersInitialized;
 
     public HeroTimers(HeroStateMachine hero, ref bool initOk)
@@ -33,6 +34,9 @@ public class HeroTimers
         if (!TimersInitialized) return false;
 
         AttackTimer = GetTimerNode("AttackTimer");
+        if (!TimersInitialized) return false;
+
+        CoyoteTimeTimer = GetTimerNode("CoyoteTimeTimer");
         if (!TimersInitialized) return false;
 
         return true;

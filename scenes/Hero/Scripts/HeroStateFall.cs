@@ -1,60 +1,90 @@
 using Godot;
 
-public class HeroStateFall : IHeroState
+public class HeroStateFall : Timer, IHeroState
 {
+    private bool Initialized;
+    private bool CoyoteTimeTimerHasTimedOut = false;
+    public bool CanCoyoteTimeJump = true;
+    private HeroStateMachine Hero;
 
-    public IHeroState DoState(HeroStateMachine hero, float delta)
+    public IHeroState DoState(HeroStateMachine Hero, float delta)
     {
-        return Fall(hero, delta);
+        InitState(Hero);
+        return Fall(delta);
     }
 
-    private IHeroState Fall(HeroStateMachine hero, float delta)
+    private void InitState(HeroStateMachine hero)
     {
-        hero.HeroMoveLogic.EnableSnap();
+        if (!Initialized)
+        {
+            Initialized = true;
+            Hero = hero;
 
-        hero.HeroAnimations.Play("HeroFall");
+            ConnectCoyoteTimeTimerSignal();
+        }
+    }
+
+    void ConnectCoyoteTimeTimerSignal()
+    {
+        Hero.HeroTimers.CoyoteTimeTimer.Connect("timeout", this, nameof(OnCoyoteTimeTimerTimeout));
+    }
+
+    public void OnCoyoteTimeTimerTimeout()
+    {
+        CanCoyoteTimeJump = false;
+    }
+
+    private IHeroState Fall(float delta)
+    {
+        Hero.HeroMoveLogic.EnableSnap();
+
+        Hero.HeroAnimations.Play("HeroFall");
 
         if (Input.IsActionJustPressed("Attack"))
         {
-            return hero.StateAttack;
+            return Hero.StateAttack;
         }
 
-        if (hero.StateLedgeGrab.CanHeroLedgeGrab(hero))
+        if (Hero.StateLedgeGrab.CanHeroLedgeGrab(Hero))
         {
-            return hero.StateLedgeGrab;
+            return Hero.StateLedgeGrab;
         }
 
         if (Input.IsActionPressed("Glide"))
         {
-            hero.HeroEquipment.Glider.OpenGlider();
-            return hero.StateGlide;
+            Hero.HeroEquipment.Glider.OpenGlider();
+            return Hero.StateGlide;
         }
 
-        if (hero.IsOnFloor())
+        if (Hero.IsOnFloor())
         {
-            hero.StateJump.ResetJumpCounter();
+            Hero.StateJump.ResetJumpCounter();
 
-            if (hero.HeroMoveLogic.IsMoving)
+            if (Hero.HeroMoveLogic.IsMoving)
             {
-                return hero.StateRun;
+                return Hero.StateRun;
             }
-            return hero.StateIdle;
+            return Hero.StateIdle;
         }
 
         if (Input.IsActionJustPressed("Jump"))
         {
 
-            if (hero.StateJump.CanWallJump(hero))
+            if (CanCoyoteTimeJump
+            || Hero.StateJump.CanWallJump(Hero)
+            || Hero.StateJump.CanJumpAgainInAir())
             {
-                return hero.StateInitJump;
-            }
-
-            if (hero.StateJump.CanJumpAgainInAir())
-            {
-                return hero.StateInitJump;
+                CanCoyoteTimeJump = false;
+                return Hero.StateInitJump;
             }
         }
 
-        return hero.StateFall;
+        return Hero.StateFall;
+    }
+
+    public void HeroPassedOverAnEdgeStartCoyoteTimeTimer(HeroStateMachine hero)
+    {
+        hero.StateFall.CanCoyoteTimeJump = true;
+        Hero.HeroTimers.CoyoteTimeTimer.Start();
     }
 }

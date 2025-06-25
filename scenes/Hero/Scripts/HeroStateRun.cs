@@ -17,6 +17,8 @@ public class HeroStateRun : IHeroState
 
         if (!hero.IsOnFloor())
         {
+            hero.StateFall.HeroPassedOverAnEdgeStartCoyoteTimeTimer(hero);
+
             return hero.StateFall;
         }
 
