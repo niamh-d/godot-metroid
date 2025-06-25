@@ -14,6 +14,11 @@ public class HeroStateFall : IHeroState
 
         hero.HeroAnimations.Play("HeroFall");
 
+        if (Input.IsActionJustPressed("Attack"))
+        {
+            return hero.StateAttack;
+        }
+
         if (hero.StateLedgeGrab.CanHeroLedgeGrab(hero))
         {
             return hero.StateLedgeGrab;
@@ -29,7 +34,7 @@ public class HeroStateFall : IHeroState
         {
             hero.StateJump.ResetJumpCounter();
 
-            if (hero.IsMoving)
+            if (hero.HeroMoveLogic.IsMoving)
             {
                 return hero.StateRun;
             }

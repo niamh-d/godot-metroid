@@ -22,7 +22,7 @@ public class HeroStateRun : IHeroState
 
         else if (hero.IsOnFloor())
         {
-            if (!hero.IsMoving)
+            if (!hero.HeroMoveLogic.IsMoving)
             {
                 return hero.StateIdle;
             }

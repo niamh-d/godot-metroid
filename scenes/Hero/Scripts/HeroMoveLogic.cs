@@ -11,6 +11,7 @@ public class HeroMoveLogic
     private HeroStateMachine Hero;
     public bool MovementDisabled = false;
     public bool GravityDisabled = false;
+    public bool IsMoving;
 
     public HeroMoveLogic(HeroStateMachine hero)
     {
@@ -21,7 +22,7 @@ public class HeroMoveLogic
     {
         Velocity = Hero.MoveAndSlideWithSnap(Velocity, SnapVector, Vector2.Up, stopOnSlope: true);
 
-        if (!Hero.IsMoving)
+        if (!IsMoving)
         {
             if (IsHeroOnSlope() || Hero.IsOnFloor())
             {
@@ -109,11 +110,11 @@ public class HeroMoveLogic
     {
         if (leftDirectionStrength is 0 && rightDirectionStrength is 0)
         {
-            Hero.IsMoving = false;
+            IsMoving = false;
         }
         else
         {
-            Hero.IsMoving = true;
+            IsMoving = true;
         }
     }
 

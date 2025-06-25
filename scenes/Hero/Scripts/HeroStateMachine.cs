@@ -12,6 +12,7 @@ public class HeroStateMachine : KinematicBody2D
     public HeroStateLedgeGrab StateLedgeGrab = new HeroStateLedgeGrab();
     public HeroStateLedgeClimb StateLedgeClimb = new HeroStateLedgeClimb();
     public HeroStateGlide StateGlide = new HeroStateGlide();
+    public HeroStateAttack StateAttack = new HeroStateAttack();
     public HeroMoveLogic HeroMoveLogic;
     public HeroCollisionShapes HeroCollisionShapes;
     public HeroTimers HeroTimers;
@@ -20,7 +21,6 @@ public class HeroStateMachine : KinematicBody2D
     public HeroEquipment HeroEquipment;
     public IHeroState CurrentState;
     private bool IsInitialized = false;
-    public bool IsMoving;
     public string LastPlayedHeroAnimation = string.Empty;
 
     public override void _Ready()
