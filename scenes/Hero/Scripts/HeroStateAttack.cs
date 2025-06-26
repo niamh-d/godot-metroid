@@ -23,6 +23,11 @@ public class HeroStateAttack : Timer, IHeroState
         }
     }
 
+    public string GetStateName()
+    {
+        return "StateAttack";
+    }
+
     private void ConnectAttackTimerSignal()
     {
         Hero.HeroTimers.AttackTimer.Connect("timeout", this, nameof(OnAttackTimerTimeout));

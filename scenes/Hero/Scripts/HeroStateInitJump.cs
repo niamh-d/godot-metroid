@@ -9,6 +9,16 @@ public class HeroStateInitJump : IHeroState
         return InitiateJump(hero, delta);
     }
 
+    public void InitState(HeroStateMachine hero)
+    {
+        // Nothing to do here
+    }
+
+    public string GetStateName()
+    {
+        return "StateInitJump";
+    }
+
     private IHeroState InitiateJump(HeroStateMachine hero, float delta)
     {
         hero.HeroMoveLogic.DisableSnap();

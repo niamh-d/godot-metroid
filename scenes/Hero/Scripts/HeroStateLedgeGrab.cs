@@ -12,7 +12,7 @@ public class HeroStateLedgeGrab : Timer, IHeroState
         return LedgeGrab();
     }
 
-    private void InitState(HeroStateMachine hero)
+    public void InitState(HeroStateMachine hero)
     {
 
         if (!Initialized)
@@ -21,6 +21,11 @@ public class HeroStateLedgeGrab : Timer, IHeroState
             ConnectLedgeFallTimerSignal();
             Initialized = true;
         }
+    }
+
+    public string GetStateName()
+    {
+        return "StateLedgeGrab";
     }
 
     private void ConnectLedgeFallTimerSignal()
@@ -63,14 +68,14 @@ public class HeroStateLedgeGrab : Timer, IHeroState
         return Hero.StateLedgeGrab;
     }
 
-    public bool CanHeroLedgeGrab(HeroStateMachine hero)
+    public bool CanHeroLedgeGrab()
     {
         if (FallAfterLedgeGrab)
         {
             return false;
         }
 
-        if (!hero.HeroRayCasts.LedgeGrabRayCastTileAbove.IsColliding() && hero.HeroRayCasts.LedgeGrabRayCastTileHead.IsColliding())
+        if (!Hero.HeroRayCasts.LedgeGrabRayCastTileAbove.IsColliding() && Hero.HeroRayCasts.LedgeGrabRayCastTileHead.IsColliding())
         {
             return true;
         }

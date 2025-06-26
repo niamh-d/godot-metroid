@@ -14,7 +14,7 @@ public class HeroStateSlideStandUp : Timer, IHeroState
         return SlideStandUp(deltatime);
     }
 
-    private void InitState(HeroStateMachine hero)
+    public void InitState(HeroStateMachine hero)
     {
         if (!Initialized)
         {
@@ -22,6 +22,11 @@ public class HeroStateSlideStandUp : Timer, IHeroState
             ConnectSlideStandUpTimerSignal();
             Initialized = true;
         }
+    }
+
+    public string GetStateName()
+    {
+        return "StateSlideStandUp";
     }
 
     private void ConnectSlideStandUpTimerSignal()

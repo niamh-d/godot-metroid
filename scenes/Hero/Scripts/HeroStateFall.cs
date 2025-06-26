@@ -12,7 +12,7 @@ public class HeroStateFall : Timer, IHeroState
         return Fall(delta);
     }
 
-    private void InitState(HeroStateMachine hero)
+    public void InitState(HeroStateMachine hero)
     {
         if (!Initialized)
         {
@@ -21,6 +21,11 @@ public class HeroStateFall : Timer, IHeroState
 
             ConnectCoyoteTimeTimerSignal();
         }
+    }
+
+    public string GetStateName()
+    {
+        return "StateFall";
     }
 
     void ConnectCoyoteTimeTimerSignal()
@@ -44,7 +49,7 @@ public class HeroStateFall : Timer, IHeroState
             return Hero.StateAttack;
         }
 
-        if (Hero.StateLedgeGrab.CanHeroLedgeGrab(Hero))
+        if (Hero.StateLedgeGrab.CanHeroLedgeGrab())
         {
             return Hero.StateLedgeGrab;
         }
@@ -70,8 +75,8 @@ public class HeroStateFall : Timer, IHeroState
         {
 
             if (CanCoyoteTimeJump
-            || Hero.StateJump.CanHeroPerformBufferJump(Hero)
-            || Hero.StateJump.CanWallJump(Hero)
+            || Hero.StateJump.CanHeroPerformBufferJump()
+            || Hero.StateJump.CanWallJump()
             || Hero.StateJump.CanJumpAgainInAir())
             {
                 CanCoyoteTimeJump = false;
@@ -82,9 +87,9 @@ public class HeroStateFall : Timer, IHeroState
         return Hero.StateFall;
     }
 
-    public void HeroPassedOverAnEdgeStartCoyoteTimeTimer(HeroStateMachine hero)
+    public void HeroPassedOverAnEdgeStartCoyoteTimeTimer()
     {
-        hero.StateFall.CanCoyoteTimeJump = true;
+        Hero.StateFall.CanCoyoteTimeJump = true;
         Hero.HeroTimers.CoyoteTimeTimer.Start();
     }
 }

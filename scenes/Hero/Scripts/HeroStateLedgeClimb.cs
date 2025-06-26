@@ -23,6 +23,11 @@ public class HeroStateLedgeClimb : Timer, IHeroState
         }
     }
 
+    public string GetStateName()
+    {
+        return "StateLedgeClimb";
+    }
+
     private void ConnectLedgeClimbTimerSignal()
     {
         Hero.HeroTimers.LedgeClimbTimer.Connect("timeout", this, nameof(OnLedgeClimbTimerTimeout));

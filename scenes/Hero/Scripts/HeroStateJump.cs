@@ -7,55 +7,72 @@ public class HeroStateJump : IHeroState
     private const float JumpForceAfterJumpCutShort = -320.0f;
     private int MaxJumps = 2;
     private int JumpCount = 0;
+    private bool Initialized = false;
+    private HeroStateMachine Hero;
 
     public IHeroState DoState(HeroStateMachine hero, float delta)
     {
-        return Jump(hero, delta);
+        InitState(hero);
+        return Jump(delta);
     }
 
-    private IHeroState Jump(HeroStateMachine hero, float delta)
+    public void InitState(HeroStateMachine hero)
     {
-        hero.HeroMoveLogic.DisableSnap();
-
-        hero.HeroAnimations.Play("HeroJump");
-
-        if (Input.IsActionJustReleased("Jump") && hero.HeroMoveLogic.Velocity.y < CutJumpThreshold)
+        if (!Initialized)
         {
-            hero.HeroMoveLogic.Velocity.y = JumpForceAfterJumpCutShort;
-            return hero.StateFall;
+            Initialized = true;
+            Hero = hero;
+        }
+    }
+
+    public string GetStateName()
+    {
+        return "StateJump";
+    }
+
+    private IHeroState Jump(float delta)
+    {
+        Hero.HeroMoveLogic.DisableSnap();
+
+        Hero.HeroAnimations.Play("HeroJump");
+
+        if (Input.IsActionJustReleased("Jump") && Hero.HeroMoveLogic.Velocity.y < CutJumpThreshold)
+        {
+            Hero.HeroMoveLogic.Velocity.y = JumpForceAfterJumpCutShort;
+            return Hero.StateFall;
         }
 
         if (Input.IsActionPressed("Glide"))
         {
-            hero.HeroAnimations.Play("HeroFall");
-            hero.HeroEquipment.Glider.OpenGlider();
-            return hero.StateGlide;
+            Hero.HeroAnimations.Play("HeroFall");
+            Hero.HeroEquipment.Glider.OpenGlider();
+            return Hero.StateGlide;
         }
 
         if (Input.IsActionJustPressed("Attack"))
         {
-            return hero.StateAttack;
+            return Hero.StateAttack;
         }
 
-        if (!hero.IsOnFloor())
+        if (!Hero.IsOnFloor())
         {
-            if (hero.HeroMoveLogic.Velocity.y < 0)
+            if (Hero.HeroMoveLogic.Velocity.y < 0)
             {
-                CornerCorrectJump(hero, delta);
-                return hero.StateJump;
+                CornerCorrectJump(delta);
+                return Hero.StateJump;
             }
 
-            if (hero.HeroMoveLogic.Velocity.y > 0)
+            if (Hero.HeroMoveLogic.Velocity.y > 0)
             {
-                return hero.StateFall;
+                return Hero.StateFall;
             }
         }
-        else if (hero.IsOnFloor())
+        else if (Hero.IsOnFloor())
         {
             ResetJumpCounter();
-            return hero.StateIdle;
+            return Hero.StateIdle;
         }
-        return hero.StateJump;
+        return Hero.StateJump;
     }
 
     public void SetMaxJumps(int numJumps)
@@ -74,48 +91,48 @@ public class HeroStateJump : IHeroState
         return JumpCount < MaxJumps;
     }
 
-    public bool CanWallJump(HeroStateMachine hero)
+    public bool CanWallJump()
     {
-        if (hero.HeroRayCasts.LeftWallRayCast.IsColliding() && !hero.HeroAnimations.FlipH)
+        if (Hero.HeroRayCasts.LeftWallRayCast.IsColliding() && !Hero.HeroAnimations.FlipH)
         {
             return true;
         }
 
-        if (hero.HeroRayCasts.RightWallRayCast.IsColliding() && hero.HeroAnimations.FlipH)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public bool CanHeroPerformBufferJump(HeroStateMachine hero)
-    {
-        if (!hero.IsOnFloor()
-        && hero.HeroRayCasts.JumpBufferRayCast.IsColliding()
-        && hero.HeroMoveLogic.Velocity.y > 0)
+        if (Hero.HeroRayCasts.RightWallRayCast.IsColliding() && Hero.HeroAnimations.FlipH)
         {
             return true;
         }
         return false;
     }
 
-    private void CornerCorrectJump(HeroStateMachine hero, float delta)
+    public bool CanHeroPerformBufferJump()
     {
-        if (hero.HeroRayCasts.CornerCorrectionLeftRayCast.IsColliding()
-        && !hero.HeroRayCasts.CornerCorrectionMiddleRayCast.IsColliding())
+        if (!Hero.IsOnFloor()
+        && Hero.HeroRayCasts.JumpBufferRayCast.IsColliding()
+        && Hero.HeroMoveLogic.Velocity.y > 0)
         {
-            if (!hero.HeroRayCasts.LedgeGrabRayCastTileHead.IsColliding())
+            return true;
+        }
+        return false;
+    }
+
+    private void CornerCorrectJump(float delta)
+    {
+        if (Hero.HeroRayCasts.CornerCorrectionLeftRayCast.IsColliding()
+        && !Hero.HeroRayCasts.CornerCorrectionMiddleRayCast.IsColliding())
+        {
+            if (!Hero.HeroRayCasts.LedgeGrabRayCastTileHead.IsColliding())
             {
-                hero.Translate(new Vector2(400 * delta, 0));
+                Hero.Translate(new Vector2(400 * delta, 0));
             }
         }
 
-        if (hero.HeroRayCasts.CornerCorrectionRightRayCast.IsColliding()
-        && !hero.HeroRayCasts.CornerCorrectionMiddleRayCast.IsColliding())
+        if (Hero.HeroRayCasts.CornerCorrectionRightRayCast.IsColliding()
+        && !Hero.HeroRayCasts.CornerCorrectionMiddleRayCast.IsColliding())
         {
-            if (!hero.HeroRayCasts.LedgeGrabRayCastTileHead.IsColliding())
+            if (!Hero.HeroRayCasts.LedgeGrabRayCastTileHead.IsColliding())
             {
-                hero.Translate(new Vector2(-400 * delta, 0));
+                Hero.Translate(new Vector2(-400 * delta, 0));
             }
         }
     }

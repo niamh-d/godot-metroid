@@ -11,7 +11,7 @@ public class HeroStateIdle : Timer, IHeroState
         return Idle(delta);
     }
 
-    private void InitState(HeroStateMachine hero)
+    public void InitState(HeroStateMachine hero)
     {
         if (!Initialized)
         {
@@ -20,6 +20,11 @@ public class HeroStateIdle : Timer, IHeroState
 
             Hero.HeroTimers.PassThroughPlatformTimer.Connect("timeout", this, nameof(OnPassThroughPlatformTimerTimeout));
         }
+    }
+
+    public string GetStateName()
+    {
+        return "StateIdle";
     }
 
     private void OnPassThroughPlatformTimerTimeout()

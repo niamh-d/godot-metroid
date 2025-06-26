@@ -2,33 +2,52 @@ using Godot;
 
 public class HeroStateRun : IHeroState
 {
+    private bool Initialized = false;
+    private HeroStateMachine Hero;
+
     public IHeroState DoState(HeroStateMachine hero, float delta)
     {
-        return Idle(hero, delta);
+        InitState(hero);
+        return Run(delta);
     }
-    private IHeroState Idle(HeroStateMachine hero, float delta)
+
+    public void InitState(HeroStateMachine hero)
     {
-        hero.HeroAnimations.Play("HeroRun");
+        if (!Initialized)
+        {
+            Initialized = true;
+            Hero = hero;
+        }
+    }
+
+    public string GetStateName()
+    {
+        return "StateRun";
+    }
+
+    private IHeroState Run(float delta)
+    {
+        Hero.HeroAnimations.Play("HeroRun");
 
         if (Input.IsActionJustPressed("Jump"))
         {
-            return hero.StateInitJump;
+            return Hero.StateInitJump;
         }
 
-        if (!hero.IsOnFloor())
+        if (!Hero.IsOnFloor())
         {
-            hero.StateFall.HeroPassedOverAnEdgeStartCoyoteTimeTimer(hero);
+            Hero.StateFall.HeroPassedOverAnEdgeStartCoyoteTimeTimer();
 
-            return hero.StateFall;
+            return Hero.StateFall;
         }
 
-        else if (hero.IsOnFloor())
+        else if (Hero.IsOnFloor())
         {
-            if (!hero.HeroMoveLogic.IsMoving)
+            if (!Hero.HeroMoveLogic.IsMoving)
             {
-                return hero.StateIdle;
+                return Hero.StateIdle;
             }
         }
-        return hero.StateRun;
+        return Hero.StateRun;
     }
 }

@@ -9,6 +9,16 @@ public class HeroStateGlide : Node2D, IHeroState
         return Glide(hero);
     }
 
+    public void InitState(HeroStateMachine hero)
+    {
+        // Nothing to do here
+    }
+
+    public string GetStateName()
+    {
+        return "StateGlide";
+    }
+
     private IHeroState Glide(HeroStateMachine hero)
     {
         StopUpwardGliding(hero);
@@ -22,7 +32,7 @@ public class HeroStateGlide : Node2D, IHeroState
             return hero.StateIdle;
         }
 
-        if (hero.StateLedgeGrab.CanHeroLedgeGrab(hero))
+        if (hero.StateLedgeGrab.CanHeroLedgeGrab())
         {
             hero.HeroEquipment.Glider.CloseGlider();
             return hero.StateLedgeGrab;

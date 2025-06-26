@@ -31,6 +31,7 @@ public class HeroStateMachine : KinematicBody2D
         {
             GD.Print("HeroStateMachine.cs – Error, could not initialize hero state machine.");
         }
+        InitHeroStates();
     }
 
     private bool InitHeroStateMachine()
@@ -55,6 +56,21 @@ public class HeroStateMachine : KinematicBody2D
         if (!initOk) return false;
 
         return true;
+    }
+
+    private void InitHeroStates()
+    {
+        StateAttack.InitState(this);
+        StateFall.InitState(this);
+        StateGlide.InitState(this);
+        StateIdle.InitState(this);
+        StateInitJump.InitState(this);
+        StateJump.InitState(this);
+        StateLedgeClimb.InitState(this);
+        StateLedgeGrab.InitState(this);
+        StateRun.InitState(this);
+        StateSlide.InitState(this);
+        StateSlideStandUp.InitState(this);
     }
 
     private bool GetHeroAnimationsNode()

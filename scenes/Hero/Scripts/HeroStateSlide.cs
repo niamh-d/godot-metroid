@@ -23,6 +23,11 @@ public class HeroStateSlide : Timer, IHeroState
         }
     }
 
+    public string GetStateName()
+    {
+        return "StateSlide";
+    }
+
     private void ConnectSlideTimerSignal()
     {
         Hero.HeroTimers.SlideTimer.Connect("timeout", this, nameof(OnSlideTimerTimeout));
