@@ -86,4 +86,15 @@ public class HeroStateJump : IHeroState
         }
         return false;
     }
+
+    public bool CanHeroPerformBufferJump(HeroStateMachine hero)
+    {
+        if (!hero.IsOnFloor()
+        && hero.HeroRayCasts.JumpBufferRayCast.IsColliding()
+        && hero.HeroMoveLogic.Velocity.y > 0)
+        {
+            return true;
+        }
+        return false;
+    }
 }

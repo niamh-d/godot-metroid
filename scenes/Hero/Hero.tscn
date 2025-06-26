@@ -329,6 +329,11 @@ position = Vector2( 9, 10 )
 enabled = true
 cast_to = Vector2( 8, 0 )
 
+[node name="JumpBufferRayCast" type="RayCast2D" parent="RayCasts"]
+position = Vector2( 0, 18 )
+enabled = true
+cast_to = Vector2( 0, 15 )
+
 [node name="Equipment" type="Node2D" parent="."]
 
 [node name="Glider" parent="Equipment" instance=ExtResource( 3 )]

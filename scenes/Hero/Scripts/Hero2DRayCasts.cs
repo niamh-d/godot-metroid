@@ -8,6 +8,7 @@ public class Hero2DRayCasts
     public RayCast2D LedgeGrabRayCastTileHead;
     public RayCast2D LeftWallRayCast;
     public RayCast2D RightWallRayCast;
+    public RayCast2D JumpBufferRayCast;
 
     public Hero2DRayCasts(HeroStateMachine hero, ref bool initOk)
     {
@@ -29,6 +30,9 @@ public class Hero2DRayCasts
         if (!RaycastsInitialized) return false;
 
         RightWallRayCast = GetRayCastNode("RightWallRayCast");
+        if (!RaycastsInitialized) return false;
+
+        JumpBufferRayCast = GetRayCastNode("JumpBufferRayCast");
         if (!RaycastsInitialized) return false;
 
         return true;

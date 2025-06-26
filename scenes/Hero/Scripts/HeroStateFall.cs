@@ -3,8 +3,7 @@ using Godot;
 public class HeroStateFall : Timer, IHeroState
 {
     private bool Initialized;
-    private bool CoyoteTimeTimerHasTimedOut = false;
-    public bool CanCoyoteTimeJump = true;
+    public bool CanCoyoteTimeJump = false;
     private HeroStateMachine Hero;
 
     public IHeroState DoState(HeroStateMachine Hero, float delta)
@@ -71,6 +70,7 @@ public class HeroStateFall : Timer, IHeroState
         {
 
             if (CanCoyoteTimeJump
+            || Hero.StateJump.CanHeroPerformBufferJump(Hero)
             || Hero.StateJump.CanWallJump(Hero)
             || Hero.StateJump.CanJumpAgainInAir())
             {
