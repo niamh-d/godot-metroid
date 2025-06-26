@@ -65,6 +65,12 @@ Attack={
  ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="Tiles"
+2d_physics/layer_2="Player"
+2d_physics/layer_3="PassThroughPlatformLayer"
+
 [mono]
 
 project/assembly_name="Metro"

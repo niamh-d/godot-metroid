@@ -2,6 +2,13 @@ using Godot;
 
 public class HeroCollisionShapes
 {
+    public enum CollisionLayersEnum
+    {
+        TILES_LAYER = 0,
+        HERO_LAYER = 1,
+        PASS_THROUGH_PLATFORM_LAYER = 2,
+    }
+
     private HeroStateMachine Hero;
     private CollisionShape2D Head;
     private CollisionShape2D Body;
@@ -81,5 +88,15 @@ public class HeroCollisionShapes
         Head.Disabled = true;
         Body.Disabled = true;
         Slide.Disabled = true;
+    }
+
+    public void TurnOffPassThroughPlatformCollision(int layer)
+    {
+        Hero.SetCollisionMaskBit(layer, false);
+    }
+
+    public void TurnOnPassThroughPlatformCollision(int layer)
+    {
+        Hero.SetCollisionMaskBit(layer, true);
     }
 }

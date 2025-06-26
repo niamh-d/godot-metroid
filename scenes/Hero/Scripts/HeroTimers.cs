@@ -9,6 +9,8 @@ public class HeroTimers
     public Timer LedgeClimbTimer;
     public Timer AttackTimer;
     public Timer CoyoteTimeTimer;
+    public Timer PassThroughPlatformTimer;
+
     private bool TimersInitialized;
 
     public HeroTimers(HeroStateMachine hero, ref bool initOk)
@@ -37,6 +39,9 @@ public class HeroTimers
         if (!TimersInitialized) return false;
 
         CoyoteTimeTimer = GetTimerNode("CoyoteTimeTimer");
+        if (!TimersInitialized) return false;
+
+        PassThroughPlatformTimer = GetTimerNode("PassThroughPlatformTimer");
         if (!TimersInitialized) return false;
 
         return true;

@@ -253,6 +253,7 @@ animations = [ {
 
 [node name="Hero" type="KinematicBody2D"]
 scale = Vector2( 2, 2 )
+collision_mask = 5
 script = ExtResource( 2 )
 
 [node name="CollisionShapeHead" type="CollisionShape2D" parent="."]
@@ -304,6 +305,8 @@ wait_time = 0.2
 [node name="CoyoteTimeTimer" type="Timer" parent="Timers"]
 wait_time = 0.14
 one_shot = true
+
+[node name="PassThroughPlatformTimer" type="Timer" parent="Timers"]
 
 [node name="RayCasts" type="Node2D" parent="."]
 

@@ -1,45 +1,72 @@
 using Godot;
 
-public class HeroStateIdle : IHeroState
+public class HeroStateIdle : Timer, IHeroState
 {
+    private bool Initialized;
+    private HeroStateMachine Hero;
+
     public IHeroState DoState(HeroStateMachine hero, float delta)
     {
-        return Idle(hero, delta);
+        InitState(hero);
+        return Idle(delta);
     }
-    private IHeroState Idle(HeroStateMachine hero, float delta)
+
+    private void InitState(HeroStateMachine hero)
     {
-        if (hero.IsOnFloor())
+        if (!Initialized)
         {
-            hero.HeroMoveLogic.EnableSnap();
+            Initialized = true;
+            Hero = hero;
+
+            Hero.HeroTimers.PassThroughPlatformTimer.Connect("timeout", this, nameof(OnPassThroughPlatformTimerTimeout));
+        }
+    }
+
+    private void OnPassThroughPlatformTimerTimeout()
+    {
+        Hero.HeroCollisionShapes.TurnOnPassThroughPlatformCollision((int)HeroCollisionShapes.CollisionLayersEnum.PASS_THROUGH_PLATFORM_LAYER);
+    }
+
+    private IHeroState Idle(float delta)
+    {
+        if (Hero.IsOnFloor())
+        {
+            Hero.HeroMoveLogic.EnableSnap();
 
             if (Input.IsActionJustPressed("Jump") && Input.IsActionPressed("Down"))
             {
-                return hero.StateSlide;
+                return Hero.StateSlide;
+            }
+
+            if (Input.IsActionJustPressed("Down"))
+            {
+                Hero.HeroCollisionShapes.TurnOffPassThroughPlatformCollision((int)HeroCollisionShapes.CollisionLayersEnum.PASS_THROUGH_PLATFORM_LAYER);
+                Hero.HeroTimers.PassThroughPlatformTimer.Start();
             }
 
             if (Input.IsActionJustPressed("Jump"))
             {
-                return hero.StateInitJump;
+                return Hero.StateInitJump;
             }
 
             if (Input.IsActionJustPressed("Attack"))
             {
-                return hero.StateAttack;
+                return Hero.StateAttack;
             }
 
-            hero.HeroAnimations.Play("HeroIdle");
+            Hero.HeroAnimations.Play("HeroIdle");
 
-            if (hero.HeroMoveLogic.IsMoving)
+            if (Hero.HeroMoveLogic.IsMoving)
             {
-                return hero.StateRun;
+                return Hero.StateRun;
             }
 
-            return hero.StateIdle;
+            return Hero.StateIdle;
         }
-        else if (!hero.IsOnFloor())
+        else if (!Hero.IsOnFloor())
         {
-            return hero.StateFall;
+            return Hero.StateFall;
         }
-        return hero.StateIdle;
+        return Hero.StateIdle;
     }
 }
