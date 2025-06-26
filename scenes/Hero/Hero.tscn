@@ -7,9 +7,8 @@
 [sub_resource type="RectangleShape2D" id=29]
 extents = Vector2( 3.75, 2 )
 
-[sub_resource type="CapsuleShape2D" id=1]
-radius = 8.0
-height = 12.0
+[sub_resource type="RectangleShape2D" id=50]
+extents = Vector2( 8, 12 )
 
 [sub_resource type="RectangleShape2D" id=30]
 extents = Vector2( 10, 7 )
@@ -262,7 +261,7 @@ shape = SubResource( 29 )
 
 [node name="CollisionShapeBody" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 4 )
-shape = SubResource( 1 )
+shape = SubResource( 50 )
 
 [node name="CollisionShapeSlide" type="CollisionShape2D" parent="."]
 position = Vector2( 2, 11 )
@@ -271,8 +270,7 @@ disabled = true
 
 [node name="HeroAnimations" type="AnimatedSprite" parent="."]
 frames = SubResource( 6 )
-animation = "HeroAttackInAir"
-frame = 3
+animation = "HeroIdle"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
@@ -331,6 +329,24 @@ cast_to = Vector2( 8, 0 )
 
 [node name="JumpBufferRayCast" type="RayCast2D" parent="RayCasts"]
 position = Vector2( 0, 18 )
+enabled = true
+cast_to = Vector2( 0, 15 )
+
+[node name="CornerCorrectionLeftRayCast" type="RayCast2D" parent="RayCasts"]
+position = Vector2( -7, -10 )
+rotation = 3.14159
+enabled = true
+cast_to = Vector2( 0, 15 )
+
+[node name="CornerCorrectionMiddleRayCast" type="RayCast2D" parent="RayCasts"]
+position = Vector2( 0, -10 )
+rotation = 3.14159
+enabled = true
+cast_to = Vector2( 0, 15 )
+
+[node name="CornerCorrectionRightRayCast" type="RayCast2D" parent="RayCasts"]
+position = Vector2( 7, -10 )
+rotation = 3.14159
 enabled = true
 cast_to = Vector2( 0, 15 )
 

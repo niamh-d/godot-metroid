@@ -9,6 +9,9 @@ public class Hero2DRayCasts
     public RayCast2D LeftWallRayCast;
     public RayCast2D RightWallRayCast;
     public RayCast2D JumpBufferRayCast;
+    public RayCast2D CornerCorrectionLeftRayCast;
+    public RayCast2D CornerCorrectionRightRayCast;
+    public RayCast2D CornerCorrectionMiddleRayCast;
 
     public Hero2DRayCasts(HeroStateMachine hero, ref bool initOk)
     {
@@ -33,6 +36,15 @@ public class Hero2DRayCasts
         if (!RaycastsInitialized) return false;
 
         JumpBufferRayCast = GetRayCastNode("JumpBufferRayCast");
+        if (!RaycastsInitialized) return false;
+
+        CornerCorrectionLeftRayCast = GetRayCastNode("CornerCorrectionLeftRayCast");
+        if (!RaycastsInitialized) return false;
+
+        CornerCorrectionRightRayCast = GetRayCastNode("CornerCorrectionRightRayCast");
+        if (!RaycastsInitialized) return false;
+
+        CornerCorrectionMiddleRayCast = GetRayCastNode("CornerCorrectionMiddleRayCast");
         if (!RaycastsInitialized) return false;
 
         return true;

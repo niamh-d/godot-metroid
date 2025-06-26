@@ -41,6 +41,7 @@ public class HeroStateJump : IHeroState
         {
             if (hero.HeroMoveLogic.Velocity.y < 0)
             {
+                CornerCorrectJump(hero, delta);
                 return hero.StateJump;
             }
 
@@ -96,5 +97,26 @@ public class HeroStateJump : IHeroState
             return true;
         }
         return false;
+    }
+
+    private void CornerCorrectJump(HeroStateMachine hero, float delta)
+    {
+        if (hero.HeroRayCasts.CornerCorrectionLeftRayCast.IsColliding()
+        && !hero.HeroRayCasts.CornerCorrectionMiddleRayCast.IsColliding())
+        {
+            if (!hero.HeroRayCasts.LedgeGrabRayCastTileHead.IsColliding())
+            {
+                hero.Translate(new Vector2(400 * delta, 0));
+            }
+        }
+
+        if (hero.HeroRayCasts.CornerCorrectionRightRayCast.IsColliding()
+        && !hero.HeroRayCasts.CornerCorrectionMiddleRayCast.IsColliding())
+        {
+            if (!hero.HeroRayCasts.LedgeGrabRayCastTileHead.IsColliding())
+            {
+                hero.Translate(new Vector2(-400 * delta, 0));
+            }
+        }
     }
 }
