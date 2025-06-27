@@ -10,6 +10,7 @@ public class HeroMoveLogic
     public Vector2 Velocity = Vector2.Zero;
     private HeroStateMachine Hero;
     public bool MovementDisabled = false;
+    public bool HorizontalMovementDisabled = false;
     public bool GravityDisabled = false;
     public bool IsMoving;
 
@@ -40,8 +41,11 @@ public class HeroMoveLogic
         {
             UpdateVelocity(leftDirectionStrength, rightDirectionStrength);
 
-            UpdateRightMovement(leftDirectionStrength, rightDirectionStrength);
-            UpdateLeftMovement(leftDirectionStrength, rightDirectionStrength);
+            if (!HorizontalMovementDisabled)
+            {
+                UpdateRightMovement(leftDirectionStrength, rightDirectionStrength);
+                UpdateLeftMovement(leftDirectionStrength, rightDirectionStrength);
+            }
 
             UpdateIsMoving(leftDirectionStrength, rightDirectionStrength);
         }
@@ -49,6 +53,8 @@ public class HeroMoveLogic
 
     private void UpdateVelocity(float leftDirectionStrength, float rightDirectionStrength)
     {
+        if (HorizontalMovementDisabled) return;
+
         if (leftDirectionStrength > 0 && rightDirectionStrength > 0)
         {
             if (Hero.HeroAnimations.FlipH)

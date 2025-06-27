@@ -17,6 +17,7 @@ public class HeroStateMachine : KinematicBody2D
     public HeroCollisionShapes HeroCollisionShapes;
     public HeroTimers HeroTimers;
     public Hero2DRayCasts HeroRayCasts;
+    public HeroArea2Ds HeroArea2Ds;
     public AnimatedSprite HeroAnimations;
     public HeroEquipment HeroEquipment;
     public IHeroState CurrentState;
@@ -47,6 +48,9 @@ public class HeroStateMachine : KinematicBody2D
         if (!initOk) return false;
 
         HeroRayCasts = new Hero2DRayCasts(this, ref initOk);
+        if (!initOk) return false;
+
+        HeroArea2Ds = new HeroArea2Ds(this, ref initOk);
         if (!initOk) return false;
 
         HeroEquipment = new HeroEquipment(this, ref initOk);
