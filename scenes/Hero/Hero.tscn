@@ -1,8 +1,9 @@
-[gd_scene load_steps=55 format=2]
+[gd_scene load_steps=67 format=2]
 
 [ext_resource path="res://Scenes/Hero/Gfx/adventurer-v1.5-Sheet.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/Hero/Scripts/HeroStateMachine.cs" type="Script" id=2]
 [ext_resource path="res://Scenes/Hero/Equipment/Glider/Glider.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/Hero/Gfx/AdventurerRopeTraversal.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=29]
 extents = Vector2( 3.75, 2 )
@@ -145,6 +146,50 @@ region = Rect2( 150, 148, 50, 37 )
 atlas = ExtResource( 1 )
 region = Rect2( 200, 148, 50, 37 )
 
+[sub_resource type="AtlasTexture" id=53]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=54]
+atlas = ExtResource( 4 )
+region = Rect2( 50, 0, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=55]
+atlas = ExtResource( 4 )
+region = Rect2( 100, 0, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=56]
+atlas = ExtResource( 4 )
+region = Rect2( 150, 0, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=57]
+atlas = ExtResource( 4 )
+region = Rect2( 200, 0, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=58]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 37, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=59]
+atlas = ExtResource( 4 )
+region = Rect2( 50, 37, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=60]
+atlas = ExtResource( 4 )
+region = Rect2( 100, 37, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=61]
+atlas = ExtResource( 4 )
+region = Rect2( 150, 37, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=62]
+atlas = ExtResource( 4 )
+region = Rect2( 200, 37, 50, 37 )
+
+[sub_resource type="AtlasTexture" id=63]
+atlas = ExtResource( 4 )
+region = Rect2( 250, 37, 50, 37 )
+
 [sub_resource type="AtlasTexture" id=9]
 atlas = ExtResource( 1 )
 region = Rect2( 50, 37, 50, 37 )
@@ -235,6 +280,16 @@ animations = [ {
 "name": "HeroLedgeGrab",
 "speed": 5.0
 }, {
+"frames": [ SubResource( 53 ), SubResource( 54 ), SubResource( 55 ), SubResource( 56 ), SubResource( 57 ) ],
+"loop": true,
+"name": "HeroRopeClimbUp",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 58 ), SubResource( 59 ), SubResource( 60 ), SubResource( 61 ), SubResource( 62 ), SubResource( 63 ) ],
+"loop": true,
+"name": "HeroRopeTraversal",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ) ],
 "loop": true,
 "name": "HeroRun",
@@ -275,7 +330,7 @@ disabled = true
 
 [node name="HeroAnimations" type="AnimatedSprite" parent="."]
 frames = SubResource( 6 )
-animation = "HeroIdle"
+animation = "HeroRopeTraversal"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true

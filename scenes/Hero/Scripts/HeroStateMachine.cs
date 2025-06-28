@@ -13,6 +13,7 @@ public class HeroStateMachine : KinematicBody2D
     public HeroStateLedgeClimb StateLedgeClimb = new HeroStateLedgeClimb();
     public HeroStateGlide StateGlide = new HeroStateGlide();
     public HeroStateAttack StateAttack = new HeroStateAttack();
+    public HeroStateOnRope StateOnRope = new HeroStateOnRope();
     public HeroMoveLogic HeroMoveLogic;
     public HeroCollisionShapes HeroCollisionShapes;
     public HeroTimers HeroTimers;
@@ -75,6 +76,7 @@ public class HeroStateMachine : KinematicBody2D
         StateRun.InitState(this);
         StateSlide.InitState(this);
         StateSlideStandUp.InitState(this);
+        StateOnRope.InitState(this);
     }
 
     private bool GetHeroAnimationsNode()
