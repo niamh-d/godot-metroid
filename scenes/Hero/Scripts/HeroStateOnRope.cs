@@ -303,7 +303,7 @@ public class HeroStateOnRope : Area2D, IHeroState
 
     private IHeroState LetGoOfRope()
     {
-        var ropeSegment = CurrentRopeHeroIsOn.RopeSegments[CurrentRopeSegmentHeroIsOn].Mass = 50.0f;
+        CurrentRopeHeroIsOn.RopeSegments[CurrentRopeSegmentHeroIsOn].Mass = 50.0f;
         Hero.HeroMoveLogic.GravityDisabled = false;
         Hero.HeroMoveLogic.HorizontalMovementDisabled = false;
         Hero.HeroMoveLogic.Velocity = Vector2.Zero;

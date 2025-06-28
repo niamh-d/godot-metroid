@@ -90,6 +90,8 @@ public class HeroMoveLogic
 
             Hero.HeroRayCasts.LedgeGrabRayCastTileAbove.RotationDegrees = 0;
             Hero.HeroRayCasts.LedgeGrabRayCastTileHead.RotationDegrees = 0;
+
+            Hero.HeroArea2Ds.DisableRopeSwingArea2DBehindHero();
         }
     }
 
@@ -109,6 +111,8 @@ public class HeroMoveLogic
 
             Hero.HeroRayCasts.LedgeGrabRayCastTileAbove.RotationDegrees = -180;
             Hero.HeroRayCasts.LedgeGrabRayCastTileHead.RotationDegrees = -180;
+
+            Hero.HeroArea2Ds.DisableRopeSwingArea2DBehindHero();
         }
     }
 
