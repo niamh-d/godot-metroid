@@ -47,6 +47,7 @@ public class MiniMap : CanvasLayer
     public Vector2 MiniMapOffset = new Vector2(77, 39);
     private List<Texture> MiniMapBorderTextures;
     private Texture MiniMapRoomBg;
+    public Rect2 Camera2DLimits = new Rect2();
 
     [Export]
     private int BorderEdgePartialThreshold = 10;
@@ -71,6 +72,31 @@ public class MiniMap : CanvasLayer
     private void GetResolution()
     {
         Resolution = OS.WindowSize;
+    }
+
+    public Rect2 GetCameraAreaLimits()
+    {
+        Vector2 size = Camera2DLimits.Size += new Vector2(Resolution.x, Resolution.y);
+        Vector2 pos = Camera2DLimits.Position;
+        return new Rect2(pos, size);
+    }
+
+    public void UpdateMinMapPosition(Vector2 heroPosition)
+    {
+        int heroXPositionOnMap;
+        int heroYPositionOnMap;
+
+        if (heroPosition.y < 0)
+            heroYPositionOnMap = (int)Mathf.Abs(heroPosition.y / Resolution.y) + 1;
+        else
+            heroYPositionOnMap = -(int)(heroPosition.y / Resolution.y);
+
+        if (heroPosition.x < 0)
+            heroXPositionOnMap = (int)Mathf.Abs(heroPosition.x / Resolution.x) + 1;
+        else
+            heroXPositionOnMap = -(int)(heroPosition.x / Resolution.x);
+
+        MiniMapRooms.Position = new Vector2((heroXPositionOnMap * MiniMapTileSize.x), (heroYPositionOnMap * MiniMapTileSize.y));
     }
 
     private void LoadMiniMapTextures()
@@ -188,6 +214,34 @@ public class MiniMap : CanvasLayer
         return miniMapRoomBorder;
     }
 
+    private void UpdateCameraAreaLimits(Vector2 roomScanPosition)
+    {
+        Vector2 size = Camera2DLimits.Size;
+        Vector2 position = Camera2DLimits.Position;
+
+        if (Camera2DLimits.Position.x > roomScanPosition.x)
+        {
+            position.x = roomScanPosition.x;
+        }
+
+        if (Camera2DLimits.Position.y > roomScanPosition.y)
+        {
+            position.y = roomScanPosition.y;
+        }
+
+        if (Camera2DLimits.Size.x < roomScanPosition.x)
+        {
+            size.x = roomScanPosition.x;
+        }
+
+        if (Camera2DLimits.Size.y < roomScanPosition.y)
+        {
+            size.y = roomScanPosition.y;
+        }
+        Camera2DLimits.Size = size;
+        Camera2DLimits.Position = position;
+    }
+
     private void ScanMiniMapRooms(Vector2 roomPosition, TileMap tileMap)
     {
         Vector2 roomAreaMiniMapPosition = new Vector2((roomPosition.x / Resolution.x) * MiniMapTileSize.x, (roomPosition.y / Resolution.y) * MiniMapTileSize.y);
@@ -205,15 +259,37 @@ public class MiniMap : CanvasLayer
 
                 if (border == MiniMapBorderE.Empty)
                 {
-                    //
+                    if (BorderlessRoomHasTiles(roomLevelPos, tileMap))
+                    {
+                        MiniMapRooms.AddChild(AddRoomBackgroundSprite(roomPosOnMiniMap));
+                        Vector2 roomScanPosition = new Vector2(roomPosition.x + (x * Resolution.x), roomPosition.y + (y * Resolution.y));
+                        UpdateCameraAreaLimits(roomScanPosition);
+                    }
                 }
                 else
                 {
                     MiniMapRooms.AddChild(AddRoomBackgroundSprite(roomPosOnMiniMap));
                     MiniMapRooms.AddChild(AddMiniMapRoomBorderToMiniMap(roomPosOnMiniMap, border));
+                    Vector2 roomScanPosition = new Vector2(roomPosition.x + (x * Resolution.x), roomPosition.y + (y * Resolution.y));
+                    UpdateCameraAreaLimits(roomScanPosition);
                 }
             }
         }
+    }
+
+    private bool BorderlessRoomHasTiles(Vector2 position, TileMap tileMap)
+    {
+        for (int y = (int)position.y; y < (int)(position.y + NumTilesXY.y); ++y)
+        {
+            for (int x = (int)position.x; x < (int)(position.x + NumTilesXY.x); ++x)
+            {
+                if (tileMap.GetCell(x, y) >= 0)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private RoomScanResult ScanRoomBorders(Vector2 position, TileMap tileMap)

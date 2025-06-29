@@ -6,7 +6,7 @@
 
 [node name="MiniMap" type="CanvasLayer"]
 script = ExtResource( 1 )
-ScanRoomAreaSize = Rect2( 0, 0, 2, 1 )
+ScanRoomAreaSize = Rect2( -10, -10, 10, 10 )
 
 [node name="ViewportContainer" type="ViewportContainer" parent="."]
 margin_right = 173.0
