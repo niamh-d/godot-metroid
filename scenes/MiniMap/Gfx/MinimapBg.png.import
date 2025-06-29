@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/MinimapBg.png-b5ffafc40767a2397e316adcb45a9a2a.stex"
+path="res://.import/MiniMapBg.png-86f99088db52cad1cb7f508d68cd1dd5.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/MiniMap/Gfx/MinimapBg.png"
-dest_files=[ "res://.import/MinimapBg.png-b5ffafc40767a2397e316adcb45a9a2a.stex" ]
+source_file="res://Scenes/MiniMap/Gfx/MiniMapBg.png"
+dest_files=[ "res://.import/MiniMapBg.png-86f99088db52cad1cb7f508d68cd1dd5.stex" ]
 
 [params]
 

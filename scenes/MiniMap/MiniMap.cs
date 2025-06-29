@@ -1,4 +1,25 @@
+using System.Collections.Generic;
 using Godot;
+
+public enum MiniMapBorderE
+{
+    Empty = 0,
+    Box = 1,
+    Bottom = 2,
+    BottomEnd = 3,
+    BottomLeft = 4,
+    BottomRight = 5,
+    HorizontalCorridor = 6,
+    Left = 7,
+    LeftEnd = 8,
+    Right = 9,
+    RightEnd = 10,
+    Top = 11,
+    TopEnd = 12,
+    TopLeft = 13,
+    TopRight = 14,
+    VerticalCorridor = 15,
+}
 
 public enum BorderScanE
 {
@@ -19,10 +40,13 @@ public class MiniMap : CanvasLayer
 {
 
     private Sprite Location;
+    private Node2D MiniMapRooms;
     private LevelArea LevelArea = null;
     private int? TileCollisionLayer = null;
     private Vector2 Resolution = Vector2.Zero;
     public Vector2 MiniMapOffset = new Vector2(77, 39);
+    private List<Texture> MiniMapBorderTextures;
+    private Texture MiniMapRoomBg;
 
     [Export]
     private int BorderEdgePartialThreshold = 10;
@@ -38,6 +62,8 @@ public class MiniMap : CanvasLayer
         GetResolution();
         TileCollisionLayer = GetWorldTileCollisionLayer();
         Location = GetNode<Sprite>("%Location");
+        MiniMapRooms = GetNode<Node2D>("%MiniMapRooms");
+        LoadMiniMapTextures();
         GetAreaNode();
         ScanRooms();
     }
@@ -45,6 +71,30 @@ public class MiniMap : CanvasLayer
     private void GetResolution()
     {
         Resolution = OS.WindowSize;
+    }
+
+    private void LoadMiniMapTextures()
+    {
+        MiniMapRoomBg = GD.Load<Texture>("res://Scenes/MiniMap/Gfx/MiniMapRoomBg.png");
+        MiniMapBorderTextures = new List<Texture>
+        {
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderEmpty.png"),
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderBox.png"),
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderBottom.png"),
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderBottomEnd.png"),
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderBottomLeft.png"),
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderBottomRight.png"),
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderHorizontalCorridor.png"),
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderLeft.png"),
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderLeftEnd.png"),
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderRight.png"),
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderRightEnd.png"),
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderTop.png"),
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderTopEnd.png"),
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderTopLeft.png"),
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderTopRight.png"),
+            GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderVerticalCorridor.png")
+        };
     }
 
     private void GetAreaNode()
@@ -116,19 +166,52 @@ public class MiniMap : CanvasLayer
         }
     }
 
+    private Sprite AddRoomBackgroundSprite(Vector2 miniMapRoomPos)
+    {
+        Sprite roomBackground = new Sprite
+        {
+            Texture = MiniMapRoomBg,
+            Centered = false,
+            Position = miniMapRoomPos
+        };
+        return roomBackground;
+    }
+
+    private Sprite AddMiniMapRoomBorderToMiniMap(Vector2 miniMapRoomPos, MiniMapBorderE border)
+    {
+        Sprite miniMapRoomBorder = new Sprite
+        {
+            Texture = MiniMapBorderTextures[(int)border],
+            Centered = false,
+            Position = miniMapRoomPos,
+        };
+        return miniMapRoomBorder;
+    }
+
     private void ScanMiniMapRooms(Vector2 roomPosition, TileMap tileMap)
     {
+        Vector2 roomAreaMiniMapPosition = new Vector2((roomPosition.x / Resolution.x) * MiniMapTileSize.x, (roomPosition.y / Resolution.y) * MiniMapTileSize.y);
         Vector2 roomLevelPos = Vector2.Zero;
 
-
-        for (int y = (int)ScanRoomAreaSize.Position.y; y < (int)ScanRoomAreaSize.End.y; ++y)
+        for (int y = (int)ScanRoomAreaSize.Position.y; y < (int)ScanRoomAreaSize.Size.y; ++y)
         {
-            for (int x = (int)ScanRoomAreaSize.Position.x; x < (int)ScanRoomAreaSize.End.x; ++x)
+            for (int x = (int)ScanRoomAreaSize.Position.x; x < (int)ScanRoomAreaSize.Size.x; ++x)
             {
                 roomLevelPos.x = x * NumTilesXY.x;
                 roomLevelPos.y = y * NumTilesXY.y;
                 RoomScanResult borders = ScanRoomBorders(roomLevelPos, tileMap);
+                MiniMapBorderE border = GetMiniMapBorder(borders);
+                Vector2 roomPosOnMiniMap = new Vector2((roomAreaMiniMapPosition.x + x * MiniMapTileSize.x) + MiniMapOffset.x, (roomAreaMiniMapPosition.y + y * MiniMapTileSize.y) + MiniMapOffset.y);
 
+                if (border == MiniMapBorderE.Empty)
+                {
+                    //
+                }
+                else
+                {
+                    MiniMapRooms.AddChild(AddRoomBackgroundSprite(roomPosOnMiniMap));
+                    MiniMapRooms.AddChild(AddMiniMapRoomBorderToMiniMap(roomPosOnMiniMap, border));
+                }
             }
         }
     }
@@ -213,4 +296,169 @@ public class MiniMap : CanvasLayer
         return BorderScanE.Empty;
     }
 
+    private MiniMapBorderE GetMiniMapBorder(RoomScanResult borders)
+    {
+        // Check which minmap border that was found, and return the result
+        if (IsBorderBox(borders)) { return MiniMapBorderE.Box; }
+        else if (IsBorderBottom(borders)) { return MiniMapBorderE.Bottom; }
+        else if (IsBorderBotomEnd(borders)) { return MiniMapBorderE.BottomEnd; }
+        else if (IsBorderBotomLeft(borders)) { return MiniMapBorderE.BottomLeft; }
+        else if (IsBorderBotomRight(borders)) { return MiniMapBorderE.BottomRight; }
+        else if (IsBorderHorizontalCorridor(borders)) { return MiniMapBorderE.HorizontalCorridor; }
+        else if (IsBorderLeft(borders)) { return MiniMapBorderE.Left; }
+        else if (IsBorderLeftEnd(borders)) { return MiniMapBorderE.LeftEnd; }
+        else if (IsBorderRight(borders)) { return MiniMapBorderE.Right; }
+        else if (IsBorderRightEnd(borders)) { return MiniMapBorderE.RightEnd; }
+        else if (IsBorderTop(borders)) { return MiniMapBorderE.Top; }
+        else if (IsBorderTopEnd(borders)) { return MiniMapBorderE.TopEnd; }
+        else if (IsBorderTopLeft(borders)) { return MiniMapBorderE.TopLeft; }
+        else if (IsBorderTopRight(borders)) { return MiniMapBorderE.TopRight; }
+        else if (IsBorderVerticalCorridor(borders)) { return MiniMapBorderE.VerticalCorridor; }
+        else { return MiniMapBorderE.Empty; }
+    }
+    private bool IsBorderEmptyOrPartial(BorderScanE borderScan)
+    {
+        if (borderScan == BorderScanE.Empty || borderScan == BorderScanE.Partial) { return true; }
+        return false;
+    }
+
+    private bool IsBorderBox(RoomScanResult borders)
+    {
+        if (!IsBorderEmptyOrPartial(borders.Top) && !IsBorderEmptyOrPartial(borders.Bottom)
+        && !IsBorderEmptyOrPartial(borders.Left) && !IsBorderEmptyOrPartial(borders.Right))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool IsBorderBottom(RoomScanResult borders)
+    {
+        if (IsBorderEmptyOrPartial(borders.Top) && !IsBorderEmptyOrPartial(borders.Bottom)
+        && IsBorderEmptyOrPartial(borders.Left) && IsBorderEmptyOrPartial(borders.Right))
+        {
+            return true;
+        }
+        return false;
+    }
+    private bool IsBorderBotomEnd(RoomScanResult borders)
+    {
+        if (IsBorderEmptyOrPartial(borders.Top) && !IsBorderEmptyOrPartial(borders.Bottom)
+        && !IsBorderEmptyOrPartial(borders.Left) && !IsBorderEmptyOrPartial(borders.Right))
+        {
+            return true;
+        }
+        return false;
+    }
+    private bool IsBorderBotomLeft(RoomScanResult borders)
+    {
+        if (IsBorderEmptyOrPartial(borders.Top) && !IsBorderEmptyOrPartial(borders.Bottom)
+        && !IsBorderEmptyOrPartial(borders.Left) && IsBorderEmptyOrPartial(borders.Right))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool IsBorderBotomRight(RoomScanResult borders)
+    {
+        if (IsBorderEmptyOrPartial(borders.Top) && !IsBorderEmptyOrPartial(borders.Bottom)
+        && IsBorderEmptyOrPartial(borders.Left) && !IsBorderEmptyOrPartial(borders.Right))
+        {
+            return true;
+        }
+        return false;
+    }
+    private bool IsBorderHorizontalCorridor(RoomScanResult borders)
+    {
+        if (!IsBorderEmptyOrPartial(borders.Top) && !IsBorderEmptyOrPartial(borders.Bottom)
+        && IsBorderEmptyOrPartial(borders.Left) && IsBorderEmptyOrPartial(borders.Right))
+        {
+            return true;
+        }
+        return false;
+    }
+    private bool IsBorderLeft(RoomScanResult borders)
+    {
+        if (IsBorderEmptyOrPartial(borders.Top) && IsBorderEmptyOrPartial(borders.Bottom)
+        && !IsBorderEmptyOrPartial(borders.Left) && IsBorderEmptyOrPartial(borders.Right))
+        {
+            return true;
+        }
+        return false;
+    }
+    private bool IsBorderLeftEnd(RoomScanResult borders)
+    {
+        if (!IsBorderEmptyOrPartial(borders.Top) && !IsBorderEmptyOrPartial(borders.Bottom)
+        && !IsBorderEmptyOrPartial(borders.Left) && IsBorderEmptyOrPartial(borders.Right))
+        {
+            return true;
+        }
+        return false;
+    }
+    private bool IsBorderRight(RoomScanResult borders)
+    {
+        if (IsBorderEmptyOrPartial(borders.Top) && IsBorderEmptyOrPartial(borders.Bottom)
+        && IsBorderEmptyOrPartial(borders.Left) && !IsBorderEmptyOrPartial(borders.Right))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool IsBorderRightEnd(RoomScanResult borders)
+    {
+        if (!IsBorderEmptyOrPartial(borders.Top) && !IsBorderEmptyOrPartial(borders.Bottom)
+        && IsBorderEmptyOrPartial(borders.Left) && !IsBorderEmptyOrPartial(borders.Right))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool IsBorderTop(RoomScanResult borders)
+    {
+        if (!IsBorderEmptyOrPartial(borders.Top) && IsBorderEmptyOrPartial(borders.Bottom)
+        && IsBorderEmptyOrPartial(borders.Left) && IsBorderEmptyOrPartial(borders.Right))
+        {
+            return true;
+        }
+        return false;
+    }
+    private bool IsBorderTopEnd(RoomScanResult borders)
+    {
+        if (!IsBorderEmptyOrPartial(borders.Top) && IsBorderEmptyOrPartial(borders.Bottom)
+        && !IsBorderEmptyOrPartial(borders.Left) && !IsBorderEmptyOrPartial(borders.Right))
+        {
+            return true;
+        }
+        return false;
+    }
+    private bool IsBorderTopLeft(RoomScanResult borders)
+    {
+        if (!IsBorderEmptyOrPartial(borders.Top) && IsBorderEmptyOrPartial(borders.Bottom)
+        && !IsBorderEmptyOrPartial(borders.Left) && IsBorderEmptyOrPartial(borders.Right))
+        {
+            return true;
+        }
+        return false;
+    }
+    private bool IsBorderTopRight(RoomScanResult borders)
+    {
+        if (!IsBorderEmptyOrPartial(borders.Top) && IsBorderEmptyOrPartial(borders.Bottom)
+        && IsBorderEmptyOrPartial(borders.Left) && !IsBorderEmptyOrPartial(borders.Right))
+        {
+            return true;
+        }
+        return false;
+    }
+    private bool IsBorderVerticalCorridor(RoomScanResult borders)
+    {
+        if (IsBorderEmptyOrPartial(borders.Top) && IsBorderEmptyOrPartial(borders.Bottom)
+        && !IsBorderEmptyOrPartial(borders.Left) && !IsBorderEmptyOrPartial(borders.Right))
+        {
+            return true;
+        }
+        return false;
+    }
 }
