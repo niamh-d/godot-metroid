@@ -19,3 +19,10 @@ position = Vector2( 219, 290 )
 [node name="MiniMap" parent="World" instance=ExtResource( 5 )]
 
 [node name="CaveBackground" parent="." instance=ExtResource( 3 )]
+
+[node name="ScanRoomAreaSize" type="ColorRect" parent="."]
+margin_left = -64000.0
+margin_top = -36000.0
+margin_right = 64000.0
+margin_bottom = 36000.0
+color = Color( 1, 1, 1, 0.196078 )
