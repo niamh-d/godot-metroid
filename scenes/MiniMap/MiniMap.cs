@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -36,6 +37,20 @@ public class RoomScanResult
     public BorderScanE Right;
 }
 
+public enum MiniMapRoomTypeE
+{
+    Normal = 0,
+    Item = 1,
+    Boss = 2,
+    Shop = 3,
+}
+
+public class MiniMapRoomType
+{
+    public MiniMapRoomTypeE RoomType;
+    public Vector2 Position;
+}
+
 public class MiniMap : CanvasLayer
 {
 
@@ -47,6 +62,7 @@ public class MiniMap : CanvasLayer
     public Vector2 MiniMapOffset = new Vector2(77, 39);
     private List<Texture> MiniMapBorderTextures;
     private Texture MiniMapRoomBg;
+    private Texture MiniMapItemLocation;
     public Rect2 Camera2DLimits = new Rect2();
 
     [Export]
@@ -102,6 +118,7 @@ public class MiniMap : CanvasLayer
     private void LoadMiniMapTextures()
     {
         MiniMapRoomBg = GD.Load<Texture>("res://Scenes/MiniMap/Gfx/MiniMapRoomBg.png");
+        MiniMapItemLocation = GD.Load<Texture>("res://Scenes/MiniMap/Gfx/MiniMapItemLocation.png");
         MiniMapBorderTextures = new List<Texture>
         {
             GD.Load<Texture>("res://Scenes/MiniMap/Gfx/Borders/BorderEmpty.png"),
@@ -178,6 +195,10 @@ public class MiniMap : CanvasLayer
 
     private void ScanRoom(Node2D room, string roomName, Vector2 roomPosition)
     {
+        List<MiniMapRoomType> miniMapRoomTypes = new List<MiniMapRoomType>();
+        var itemsLocations = GetRoomsWithItems(room);
+        miniMapRoomTypes.AddRange(itemsLocations);
+
         foreach (Node2D node in room.GetChildren())
         {
             if (node.GetClass().Equals("TileMap"))
@@ -186,10 +207,47 @@ public class MiniMap : CanvasLayer
 
                 if (tileMap.CollisionLayer == TileCollisionLayer)
                 {
-                    ScanMiniMapRooms(roomPosition, tileMap);
+                    ScanMiniMapRooms(roomPosition, tileMap, miniMapRoomTypes);
                 }
             }
         }
+    }
+
+    private List<MiniMapRoomType> GetRoomsWithItems(Node2D room)
+    {
+        List<MiniMapRoomType> itemsLocations = new List<MiniMapRoomType>();
+
+        foreach (Node2D node in room.GetChildren())
+        {
+            if (node.Name.Contains("ItemPickUp"))
+            {
+                ItemPickUpSphere itemPickUp = (ItemPickUpSphere)node;
+                MiniMapRoomType item = new MiniMapRoomType();
+
+                int x = (int)(itemPickUp.GlobalPosition.x / Resolution.x);
+                int y = (int)(itemPickUp.GlobalPosition.y / Resolution.y);
+
+                item.RoomType = MiniMapRoomTypeE.Item;
+                item.Position = new Vector2((float)x, (float)y);
+                itemsLocations.Add(item);
+            }
+        }
+        return itemsLocations;
+    }
+
+    private Sprite AddMiniMapIcon(Vector2 miniMapRoomPos, MiniMapRoomTypeE roomType)
+    {
+        if (roomType == MiniMapRoomTypeE.Item)
+        {
+            Sprite miniMapIcon = new Sprite
+            {
+                Texture = MiniMapItemLocation,
+                Centered = false,
+                Position = miniMapRoomPos
+            };
+            return miniMapIcon;
+        }
+        return null;
     }
 
     private Sprite AddRoomBackgroundSprite(Vector2 miniMapRoomPos)
@@ -242,9 +300,23 @@ public class MiniMap : CanvasLayer
         Camera2DLimits.Position = position;
     }
 
-    private void ScanMiniMapRooms(Vector2 roomPosition, TileMap tileMap)
+    private void DrawSpecialRoom(int scanX, int scanY, List<MiniMapRoomType> miniMapSpecialRooms, Vector2 miniMapRoomPos)
+    {
+        foreach (var room in miniMapSpecialRooms)
+        {
+            if (room.Position.x == scanX && room.Position.y == scanY)
+            {
+                MiniMapRooms.AddChild(AddMiniMapIcon(miniMapRoomPos, room.RoomType));
+            }
+        }
+    }
+
+    private void ScanMiniMapRooms(Vector2 roomPosition, TileMap tileMap, List<MiniMapRoomType> miniMapSpecialRooms)
     {
         Vector2 roomAreaMiniMapPosition = new Vector2((roomPosition.x / Resolution.x) * MiniMapTileSize.x, (roomPosition.y / Resolution.y) * MiniMapTileSize.y);
+
+        Vector2 roomXYPos = new Vector2((int)(roomPosition.x / Resolution.x), (int)(roomPosition.y / Resolution.y));
+
         Vector2 roomLevelPos = Vector2.Zero;
 
         for (int y = (int)ScanRoomAreaSize.Position.y; y < (int)ScanRoomAreaSize.Size.y; ++y)
@@ -264,6 +336,7 @@ public class MiniMap : CanvasLayer
                         MiniMapRooms.AddChild(AddRoomBackgroundSprite(roomPosOnMiniMap));
                         Vector2 roomScanPosition = new Vector2(roomPosition.x + (x * Resolution.x), roomPosition.y + (y * Resolution.y));
                         UpdateCameraAreaLimits(roomScanPosition);
+                        DrawSpecialRoom(x + (int)roomXYPos.x, y + (int)roomXYPos.y, miniMapSpecialRooms, roomPosOnMiniMap);
                     }
                 }
                 else
@@ -272,6 +345,7 @@ public class MiniMap : CanvasLayer
                     MiniMapRooms.AddChild(AddMiniMapRoomBorderToMiniMap(roomPosOnMiniMap, border));
                     Vector2 roomScanPosition = new Vector2(roomPosition.x + (x * Resolution.x), roomPosition.y + (y * Resolution.y));
                     UpdateCameraAreaLimits(roomScanPosition);
+                    DrawSpecialRoom(x + (int)roomXYPos.x, y + (int)roomXYPos.y, miniMapSpecialRooms, roomPosOnMiniMap);
                 }
             }
         }
@@ -374,7 +448,6 @@ public class MiniMap : CanvasLayer
 
     private MiniMapBorderE GetMiniMapBorder(RoomScanResult borders)
     {
-        // Check which minmap border that was found, and return the result
         if (IsBorderBox(borders)) { return MiniMapBorderE.Box; }
         else if (IsBorderBottom(borders)) { return MiniMapBorderE.Bottom; }
         else if (IsBorderBotomEnd(borders)) { return MiniMapBorderE.BottomEnd; }

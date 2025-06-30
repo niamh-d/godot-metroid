@@ -1,8 +1,9 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://Scenes/TileMaps/Cave/WoodenPlatforms.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/TileMaps/Cave/CaveTileSet.tres" type="TileSet" id=2]
 [ext_resource path="res://Scenes/World/LevelRoom.cs" type="Script" id=3]
+[ext_resource path="res://Scenes/Items/ItemPickUpSphere/ItemPickUpSphere.tscn" type="PackedScene" id=4]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 16, 0, 16 )
@@ -491,3 +492,6 @@ collision_layer = 4
 collision_mask = 4
 format = 1
 tile_data = PoolIntArray( 655405, 0, 0, 655406, 1, 0, 655407, 2, 0, 655408, 3, 0, 720942, 10, 0, 720943, 11, 0, 786478, 12, 0, 786479, 13, 0, 983056, 4, 0, 983057, 5, 0, 983058, 6, 0, 983059, 7, 0, 1048593, 10, 0, 1048594, 11, 0, 1114129, 12, 0, 1114130, 13, 0 )
+
+[node name="ItemPickUpSphere" parent="." instance=ExtResource( 4 )]
+position = Vector2( 1493, 273.006 )

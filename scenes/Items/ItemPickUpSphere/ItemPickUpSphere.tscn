@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/Items/ItemPickUpSphere/Gfx/Item/Glider.png" type="Texture" id=1]
+[ext_resource path="res://Scenes/Items/ItemPickUpSphere/ItemPickUpSphere.cs" type="Script" id=2]
+
+[node name="ItemPickUpSphere" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Item" type="Node2D" parent="."]
+
+[node name="ItemInside" type="Node2D" parent="Item"]
+
+[node name="Glider" type="Sprite" parent="Item/ItemInside"]
+texture = ExtResource( 1 )
